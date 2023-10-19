@@ -131,4 +131,8 @@ class ETLTool:
 
 
 if __name__ == "__main__":
+    # Init new tool
     etl_tool = ETLTool()
+    
+    # Run the tool
+    etl_tool.run_tool()
