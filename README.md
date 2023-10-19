@@ -5,8 +5,7 @@ CLI app to extract and manipulate XML data.
 
 1. [Introduction](#introduction)
 2. [Features](#features)
-3. [Dependencies](#dependencies)
-4. [Installation](#installation)
+3. [Requirements](#requirements)
 5. [Usage](#usage)
 6. [Testing](#testing)
 7. [Contributions](#contributions)
