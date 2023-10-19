@@ -36,3 +36,19 @@ def remove_products(tree, category, min_rating):
         if float(prod.find("rating").text) < min_rating:
             root.remove(prod)
 
+# Outputs the report on the CLI
+def generate_report(tree):
+    report = {}
+    root = tree.getroot()
+
+    for prod in root.findall('product'):
+        category = prod.attrib["category"]
+        price = float(prod.find("price").text)
+        report[category] = report.get(category, {"count": 0, "total_price": 0})
+        report[category]["count"] += 1
+        report[category]["total_price"] += price
+
+    for k, v in report.items():
+        print(f"\nCategory: {k}")
+        print(f"Total Product Count: {v['count']}")
+        print(f"Total Price: {v['total_price']}")
