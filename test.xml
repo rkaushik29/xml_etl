@@ -1,0 +1,12 @@
+<products>
+    <product category="Electronics">
+    <name>Iphone 12 Pro</name>
+    <price>599.99</price>
+    <rating>4.5</rating>
+    </product>
+    <product category="Books">
+    <name>Python for Beginners</name>
+    <price>29.99</price>
+    <rating>4.0</rating>
+    </product>
+</products>
