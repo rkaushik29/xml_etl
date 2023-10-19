@@ -39,21 +39,21 @@ class ETLToolTest(unittest.TestCase):
     # Testing modification of price by imitating actual call
     def test_modify_price(self):
         category, increase_pct = "Electronics", 10
-        self.tool.modify_price(self.tool.tree, category, increase_pct)
+        self.tool.modify_price(category, increase_pct)
         for product in self.tool.tree.getroot().findall("./product[@category='Electronics']"):
             self.assertEqual(float(product.find('price').text), 659.989)
     
     # Testing rename of category
     def test_rename(self):
         old_name, new_name = "Books", "Python Books"
-        self.tool.rename_category(self.tool.tree, old_name, new_name)
+        self.tool.rename_category(old_name, new_name)
         for product in self.tool.tree.getroot().findall("./product[@category='Python Books']"):
             self.assertIsNotNone(product)
     
     # Testing removal of products below a min rating
     def test_remove_products(self):
         category, min_rating = "Books", 4.2
-        self.tool.remove_products(self.tool.tree, category, min_rating)
+        self.tool.remove_products(category, min_rating)
         for product in self.tool.tree.getroot().findall("./product[@category='Books']"):
             self.assertIsNone(product)
     

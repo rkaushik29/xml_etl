@@ -23,35 +23,35 @@ class ETLTool:
             print(f"Error: {e}")
 
     # Function to save the XML file after data manipulation.
-    def save_xml(self, tree, save_path):
-        if tree is not None:
-            tree.write(save_path)
+    def save_xml(self, save_path):
+        if self.tree is not None:
+            self.tree.write(save_path)
 
     # Modified price of items in a category.
-    def modify_price(self, tree, category, increase):
-        root = tree.getroot()
+    def modify_price(self, category, increase):
+        root = self.tree.getroot()
         for prod in root.findall(f"./product[@category='{category}']"):
             price = float(prod.find("price").text)
             new_price = price * (1 + increase/100)
             prod.find("price").text = str(new_price)
 
     # Rename a category to another one.
-    def rename_category(self, tree, old_name, new_name):
-        root = tree.getroot()
+    def rename_category(self, old_name, new_name):
+        root = self.tree.getroot()
         for prod in root.findall(f"./product[@category='{old_name}']"):
             prod.set("category", new_name)
 
     # Removes products below a certain rating.
-    def remove_products(self, tree, category, min_rating):
-        root = tree.getroot()
+    def remove_products(self, category, min_rating):
+        root = self.tree.getroot()
         for prod in root.findall(f"./product[@category='{category}']"):
             if float(prod.find("rating").text) < min_rating:
                 root.remove(prod)
 
     # Outputs the report on the CLI
-    def generate_report(self, tree):
+    def generate_report(self):
         report = {}
-        root = tree.getroot()
+        root = self.tree.getroot()
 
         for prod in root.findall("product"):
             category = prod.attrib["category"]
@@ -93,7 +93,7 @@ class ETLTool:
                     break
                 category = input("Enter the category name: ")
                 percentage = float(input("Enter the percentage increase (number only): "))
-                self.modify_price(self.tree, category, percentage)
+                self.modify_price(category, percentage)
             
             elif select == "3":
                 if self.tree is None:
@@ -101,7 +101,7 @@ class ETLTool:
                     break
                 old_name = input("Enter the current category name: ")
                 new_name = input("Enter the new category name: ")
-                self.rename_category(self.tree, old_name, new_name)
+                self.rename_category(old_name, new_name)
             
             elif select == "4":
                 if self.tree is None:
@@ -109,25 +109,26 @@ class ETLTool:
                     break
                 category = input("Enter the category name: ")
                 min_rating = float(input("Enter the minimum rating: "))
-                self.remove_products(self.tree, category, min_rating)
+                self.remove_products(category, min_rating)
             
             elif select == "5":
                 if self.tree is None:
                     print(LOAD_ERR)
                     break
                 save_path = input("Enter the path to save the XML file: ")
-                self.save_xml(self.tree, save_path)
+                self.save_xml(save_path)
             
             elif select == "6":
                 if self.tree is None:
                     print(LOAD_ERR)
                     break
-                self.generate_report(self.tree)
+                self.generate_report()
 
             elif select == "7":
+                print("\nGoodbye!")
                 break
             
-            input("\nClick to Proceed")     # Breakpoint before next menu appears
+            input("\nClick any key to proceed")     # Breakpoint before next menu appears
 
 
 if __name__ == "__main__":
