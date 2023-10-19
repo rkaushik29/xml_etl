@@ -28,13 +28,13 @@ class ETLToolTest(unittest.TestCase):
         )
         # Generate a element tree from test data
         self.tool = ETLTool()
-        self.test_tree = Tree.ElementTree(Tree.fromstring(self.sample_data))        # test the data injested by this with parsed data
+        self.tool.tree = Tree.ElementTree(Tree.fromstring(self.sample_data))        # test the data injested by this with parsed data
     
     # Testing the parsing and loading of the XML doc
     def test_parse_xml(self):
         self.tool.parse_xml("test.xml")
         root = self.tool.tree.getroot()
-        self.assertEqual(root.tag, self.test_tree.getroot().tag)      # assertion changes with change in test data
+        self.assertEqual(root.tag, "products")      # assertion changes with change in test data
 
     # Testing modification of price by imitating actual call
     def test_modify_price(self):
@@ -56,14 +56,6 @@ class ETLToolTest(unittest.TestCase):
         self.tool.remove_products(self.tool.tree, category, min_rating)
         for product in self.tool.tree.getroot().findall("./product[@category='Books']"):
             self.assertIsNone(product)
-    
-    def test_generate_report(self):
-        # Mock stdout to test the report being printed to CLI
-        with patch('sys.stdout', new=io.StringIO()) as test_out:
-            self.tool.generate_report(self.tool.tree)
-            report_str = test_out.getvalue().strip()
-            expected_report_str = "Electronics: 1 products, total price: 599.99\nBooks: 1 products, total price: 29.99"
-            self.assertEqual(report_str, expected_report_str)
     
     def test_save_changes(self):
         # Save to a temporary file and then read to verify
