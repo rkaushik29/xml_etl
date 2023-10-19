@@ -1,7 +1,13 @@
 import xml.etree.ElementTree as Tree
 import unittest
-from etl_tool_test import ETLToolTest
+import os
 
+# Clear Screen
+def clear_screen():
+    if os.name == 'posix':  # Linux
+        os.system('clear')
+    elif os.name in ('nt', 'dos', 'ce'):    # Windows
+        os.system('CLS')
 
 class ETLTool:
     # Constructor
@@ -62,6 +68,7 @@ class ETLTool:
     # Runs the UI for the tool as a menu based interface.
     def run_tool(self):
         while True:
+            clear_screen()
             print("\nWelcome to the Product ETL Tool")
             print("1: Load XML File")
             print("2: Increase Price By Percent")
@@ -69,8 +76,7 @@ class ETLTool:
             print("4: Remove Products Below Minimum Rating")
             print("5: Save Changes to New File")
             print("6: Generate Report on CLI")
-            print("7: Run Unit Test Suite")
-            print("8: Exit")
+            print("7: Exit")
 
             select = input("Enter your choice here (Number): ")
             LOAD_ERR = "Please load an XML file first by selecting option 1."
@@ -82,52 +88,46 @@ class ETLTool:
             
             elif select == "2":
                 # Check if tree is filled with a loaded XML. If not, we first need to load it (1)
-                if self.tree is not None:
+                if self.tree is None:
                     print(LOAD_ERR)
-                    continue
+                    break
                 category = input("Enter the category name: ")
                 percentage = float(input("Enter the percentage increase (number only): "))
                 self.modify_price(self.tree, category, percentage)
             
             elif select == "3":
-                if self.tree is not None:
+                if self.tree is None:
                     print(LOAD_ERR)
-                    continue
+                    break
                 old_name = input("Enter the current category name: ")
                 new_name = input("Enter the new category name: ")
                 self.rename_category(self.tree, old_name, new_name)
             
             elif select == "4":
-                if self.tree is not None:
+                if self.tree is None:
                     print(LOAD_ERR)
-                    continue
+                    break
                 category = input("Enter the category name: ")
                 min_rating = float(input("Enter the minimum rating: "))
                 self.remove_products(self.tree, category, min_rating)
             
             elif select == "5":
-                if self.tree is not None:
+                if self.tree is None:
                     print(LOAD_ERR)
-                    continue
+                    break
                 save_path = input("Enter the path to save the XML file: ")
                 self.save_xml(self.tree, save_path)
             
             elif select == "6":
-                if self.tree is not None:
+                if self.tree is None:
                     print(LOAD_ERR)
-                    continue
+                    break
                 self.generate_report(self.tree)
 
             elif select == "7":
-                test = unittest.TestLoader().loadTestsFromTestCase(ETLToolTest)
-                if test:
-                    print("\nRunning Unit Test Suite...")
-                    unittest.TextTestRunner().run(test=test)
-                else:
-                    print("Test Case unavailable")
-
-            elif select == "8":
                 break
+            
+            input("\nClick to Proceed")     # Breakpoint before next menu appears
 
 
 if __name__ == "__main__":
